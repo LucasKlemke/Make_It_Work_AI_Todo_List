@@ -1,4 +1,4 @@
-<img loading="lazy" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg" width="40" height="40"/>
+<img loading="lazy" src="./logo_to_do.png" width="100" height="100"/>
 
 # To-Do List com Objetivos de Aprendizado
 
