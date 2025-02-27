@@ -8,6 +8,27 @@
       "when": 1740439723781,
       "tag": "0000_low_chimera",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1740697045798,
+      "tag": "0001_brown_ricochet",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1740697191970,
+      "tag": "0002_tough_warbound",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1740698248218,
+      "tag": "0003_early_sheva_callister",
+      "breakpoints": true
     }
   ]
 }
