@@ -29,6 +29,27 @@
       "when": 1740698248218,
       "tag": "0003_early_sheva_callister",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1741648410388,
+      "tag": "0004_violet_the_hand",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1741734474620,
+      "tag": "0005_tiresome_electro",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1741734787093,
+      "tag": "0006_sharp_bastion",
+      "breakpoints": true
     }
   ]
 }

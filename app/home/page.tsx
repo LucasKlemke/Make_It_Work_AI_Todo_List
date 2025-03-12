@@ -1,9 +1,9 @@
-'use client';
 import { StaggeredFade } from '@/components/ui/staggered-fade';
 import TasksBlock from './components/tasks_block';
 import SettingsBlock from './components/settings_block';
+import { auth } from '../auth';
 
-export default function page() {
+export default async function page() {
   return (
     <div className="w-full">
       <div className="pb-4">
