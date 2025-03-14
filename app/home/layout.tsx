@@ -27,9 +27,9 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className='mt-3 mx-5'>
+    <div className="mt-3 mx-5 ">
       <div className=" flex  justify-center">
-        <nav className=" bg-background w-full top-2 dark:drop-shadow-none drop-shadow-md border rounded-2xl">
+        <nav className=" bg-background dark:bg-neutral-900 w-full top-2 dark:drop-shadow-none drop-shadow-md border rounded-2xl">
           <div className="flex justify-between   items-center p-4 gap-x-3 ">
             <div className="flex items-center gap-x-3">
               <p className="text-4xl bg-gradient-to-r inline-block text-transparent bg-clip-text from-blue-600 to-pink-400">

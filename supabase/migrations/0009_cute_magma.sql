@@ -1,0 +1,1 @@
+ALTER TABLE "tasks" DROP COLUMN "must_be_done_at";

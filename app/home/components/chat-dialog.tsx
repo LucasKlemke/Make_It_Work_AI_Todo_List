@@ -4,16 +4,23 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useChat } from '@ai-sdk/react';
 import { useSession } from 'next-auth/react';
+import { useState } from 'react';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
+import PlanBlock from './plan-block';
+import { Loader2 } from 'lucide-react';
+import Image from 'next/image';
 
 export function ChatDialog({
   open,
@@ -23,59 +30,135 @@ export function ChatDialog({
   onClose: () => void;
 }) {
   const { data: session } = useSession();
+  const [isLoading, setIsLoading] = useState(false);
+  const [plan, setPlan] = useState(null);
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     body: { user_name: session?.user?.name, user_age: 18 },
     maxSteps: 5,
+    onFinish: (message) => {
+      setIsLoading(false);
+      message.toolInvocations.map((invocation) => {
+        if (invocation.toolName === 'createPlan') {
+          setPlan(invocation.result);
+        }
+      });
+    },
   });
+
   return (
-    <Dialog open onOpenChange={onClose}>
+    <Dialog open={open} onOpenChange={() => console.log('nada')}>
       <DialogContent className="max-w-7xl">
         <DialogHeader>
-          <DialogTitle>Converse com a IA</DialogTitle>
-          <DialogDescription>
-            Defina suas metas e objetivos aqui.
+          <DialogTitle>Defina suas metas</DialogTitle>
+          <DialogDescription onClick={() => console.log(plan)}>
+            Antes de começar, vamos criar um plano para os próximos 30 dias.
           </DialogDescription>
         </DialogHeader>
-        <ScrollArea className="flex  h-[70vh] flex-col w-full max-w-md py-24 mx-auto stretch">
-          <div
-            className={`whitespace-pre-wrap p-4 my-2 rounded-lg 'bg-gray-100 text-gray-900 self-start`}
-          >
-            <p className="font-semibold">AI:</p>
-            <p>Como posso ajudar, {session?.user?.name} ?</p>
-          </div>
-          {messages.map((m) => (
+        <div className="grid grid-cols-2 gap-5">
+          <ScrollArea className="flex h-[70vh] flex-col w-full max-w-md py-24 mx-auto stretch">
             <div
-              key={m.id}
-              className={`whitespace-pre-wrap p-4 my-2 rounded-lg ${
-                m.role === 'user'
-                  ? 'bg-blue-100 text-blue-900 self-end'
-                  : 'bg-gray-100 text-gray-900 self-start'
-              }`}
+              className={`whitespace-pre-wrap p-4 my-2 rounded-lg  text-slate-900  self-start`}
             >
-              <p className="font-semibold">
-                {' '}
-                {m.role === 'user' ? session?.user?.name : 'AI: '}
+              <p className="bg-gradient-to-r inline-block text-transparent bg-clip-text from-blue-600 to-pink-400">
+                Sarah:
               </p>
-              {m.toolInvocations ? (
-                <pre>{JSON.stringify(m.toolInvocations, null, 2)}</pre>
-              ) : (
-                <Markdown>{m.content}</Markdown>
-              )}
+              <p onClick={() => console.log(messages)}>
+                Olá {session?.user?.name} ! O que você gostaria de
+                fazer/aprender nos próximos 30 dias ?
+              </p>
             </div>
-          ))}
+            {messages.map((m) => (
+              <div
+                key={m.id}
+                className={`whitespace-pre-wrap p-4 my-2 rounded-lg ${
+                  m.role === 'user' ? 'border bg-slate-100 self-start' : ''
+                }`}
+              >
+                <p
+                  className={`font-semibold ${m.role !== 'user' && ' bg-gradient-to-r inline-block text-transparent bg-clip-text from-blue-600 to-pink-400'}`}
+                >
+                  {m.role === 'user' ? session?.user?.name : 'Sarah:'}
+                </p>
+                {m.toolInvocations ? (
+                  <p>Plano foi criado com sucesso</p>
+                ) : (
+                  <Markdown>{m.content}</Markdown>
+                )}
+              </div>
+            ))}
+            {isLoading && (
+              <div className="flex justify-center my-4">
+                <Loader2 className="animate-spin" />
+              </div>
+            )}
+            <form
+              onSubmit={(e) => {
+                handleSubmit(e);
+                setIsLoading(true);
+              }}
+              className="fixed bottom-0 w-full max-w-md p-2 mb-8 flex items-center"
+            >
+              <Input
+                disabled={isLoading}
+                value={input}
+                className="shadow-md dark:shadow-none flex-grow"
+                placeholder="Diga olá..."
+                onChange={handleInputChange}
+              />
+              <Button type="submit" disabled={isLoading} className="ml-2">
+                Enviar
+              </Button>
+            </form>
+          </ScrollArea>
+          {plan ? (
+            <PlanBlock plan={plan} onClose={onClose} />
+          ) : (
+            <div className="h-[70vh] shadow-md p-5 border rounded-xl">
+              <div className="flex flex-col items-start gap-y-3">
+                <div className="flex items-center gap-x-3">
+                  <p className="text-4xl bg-gradient-to-r inline-block text-transparent bg-clip-text from-blue-600 to-pink-400">
+                    Make it Work
+                  </p>
+                  <Image
+                    src={'/logo_to_do.png'}
+                    width={30}
+                    height={30}
+                    alt={'xxx'}
+                  />
+                </div>
 
-          <form
-            onSubmit={handleSubmit}
-            className="fixed bottom-0 w-full max-w-md p-2 mb-8"
-          >
-            <Input
-              value={input}
-              className="shadow-md dark:shadow-none"
-              placeholder="Diga olá..."
-              onChange={handleInputChange}
-            />
-          </form>
-        </ScrollArea>
+                <div className="mt-4">
+                  <p className="text-start font-light text-5xl ">
+                    Olá, {session?.user?.name}!
+                  </p>
+                  <div className="mt-4">
+                    <p className="text-muted-foreground">
+                      Antes de começar, precisamos que você explique melhor o
+                      que deseja alcançar nos próximos 30 dias. Sarah está aqui
+                      para te ajudar a decidir.
+                    </p>
+                    <div className="mt-4">
+                      <p className=" mt-2">
+                        1. Defina os objetivos que deseja alcançar nos próximos
+                        30 dias.
+                      </p>
+                      <p className=" mt-2">
+                        2. Converse com a IA para personalizar suas metas.
+                      </p>
+                      <p className=" mt-2">
+                        3. A IA criará um plano de 30 dias baseado nas suas
+                        metas.
+                      </p>
+                      <p className=" mt-2">
+                        4. Revise e confirme o plano para começar.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </DialogContent>
     </Dialog>
   );

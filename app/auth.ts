@@ -21,4 +21,20 @@ export const {
       },
     }),
   ],
+  callbacks: {
+    async jwt({ token, user }) {
+      // Se o usuário acabou de ser autenticado, adicione o ID no token
+      if (user?.id) {
+        token.id = user.id;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      // Adiciona o ID ao objeto session.user
+      if (session?.user) {
+        session.user.id = token.id;
+      }
+      return session;
+    },
+  },
 });

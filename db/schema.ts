@@ -9,7 +9,7 @@ import {
 } from 'drizzle-orm/pg-core';
 import type { AdapterAccount } from 'next-auth/adapters';
 import { db } from './index';
-import { eq } from 'drizzle-orm';
+import { eq, gte, and, InferSelectModel } from 'drizzle-orm';
 import { genSaltSync, hashSync } from 'bcrypt-ts';
 
 export async function getUser(email: string) {
@@ -36,6 +36,31 @@ export async function createUser(
     createdAt: new Date(),
     image: '',
   });
+}
+
+export async function createMonthlyGoal(
+  userId: string,
+  objective: string,
+  description: string,
+  methodology: string
+) {
+  // obter o mês atual
+  let date = new Date();
+  let month = new Date(date.getFullYear(), date.getMonth(), 1);
+
+  const result = await db
+    .insert(monthlyGoalsTable)
+    .values({
+      userId,
+      objective,
+      description,
+      methodology,
+      month,
+      createdAt: new Date(),
+    })
+    .returning({ id: monthlyGoalsTable.id });
+
+  return result[0]?.id;
 }
 
 // Tabela de usuários com informações de verificação e data de cadastro
@@ -77,6 +102,32 @@ export const accounts = pgTable(
     },
   ]
 );
+
+export const createTasks = async (tasks: InsertTask[]) => {
+  return await db.insert(tasksTable).values(tasks);
+};
+
+export const getTasks = async (monthlyGoalId: number, currentDate: Date) => {
+  const formatedDate = new Date(currentDate);
+  formatedDate.setHours(3, 0, 0, 0);
+
+  return await db
+    .select()
+    .from(tasksTable)
+    .where(
+      and(
+        eq(tasksTable.monthlyGoalId, monthlyGoalId),
+        eq(tasksTable.taskDate, formatedDate)
+      )
+    );
+};
+
+export const getMonthlyGoal = async (userId: string) => {
+  return await db
+    .select()
+    .from(monthlyGoalsTable)
+    .where(eq(monthlyGoalsTable.userId, userId));
+};
 
 export const sessions = pgTable('session', {
   sessionToken: text('sessionToken').primaryKey(),
@@ -131,9 +182,11 @@ export const monthlyGoalsTable = pgTable('monthly_goals', {
   userId: text('user_id')
     .notNull()
     .references(() => usersTable.id, { onDelete: 'cascade' }),
-  goal: text('goal').notNull(), // Objetivo mensal do usuário
-  month: timestamp('month').notNull(), // Data representando o mês (por exemplo, 1º dia do mês)
+  objective: text('goal').notNull(), // Objetivo mensal do usuário
+  description: text('description'), // Descrição da meta
+  methodology: text('methodology'), // Metodologia para atingir a meta
   createdAt: timestamp('created_at').notNull().defaultNow(),
+  month: timestamp('month').notNull(), // Data representando o mês (por exemplo, 1º dia do mês)
 });
 
 // Tabela para as tasks, cada uma relacionada a uma meta mensal
@@ -144,7 +197,6 @@ export const tasksTable = pgTable('tasks', {
     .references(() => monthlyGoalsTable.id, { onDelete: 'cascade' }),
   taskDate: timestamp('task_date').notNull(), // Data em que a task deverá ser realizada
   description: text('description').notNull(), // Descrição da task
-  isDone: boolean('is_done').notNull().default(false), // Indica se a task foi concluída
   duration: integer('duration').notNull(), // Duração da task (em minutos, por exemplo)
   completedAt: timestamp('completed_at'), // Data em que a task foi completada (null se não concluída)
   createdAt: timestamp('created_at').notNull().defaultNow(),
@@ -157,5 +209,6 @@ export type SelectUser = typeof usersTable.$inferSelect;
 export type InsertMonthlyGoal = typeof monthlyGoalsTable.$inferInsert;
 export type SelectMonthlyGoal = typeof monthlyGoalsTable.$inferSelect;
 
+export type Tasks = InferSelectModel<typeof tasksTable>;
 export type InsertTask = typeof tasksTable.$inferInsert;
 export type SelectTask = typeof tasksTable.$inferSelect;

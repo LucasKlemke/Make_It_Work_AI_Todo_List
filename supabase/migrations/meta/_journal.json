@@ -50,6 +50,27 @@
       "when": 1741734787093,
       "tag": "0006_sharp_bastion",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1741910640298,
+      "tag": "0007_lovely_barracuda",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1741976304999,
+      "tag": "0008_broken_nightcrawler",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1741979628058,
+      "tag": "0009_cute_magma",
+      "breakpoints": true
     }
   ]
 }

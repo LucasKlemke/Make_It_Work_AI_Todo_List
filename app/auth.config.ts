@@ -1,4 +1,6 @@
+import { request } from 'http';
 import NextAuthConfig from 'next-auth';
+import { NextResponse } from 'next/server';
 
 export const authConfig = {
   pages: {
@@ -12,7 +14,11 @@ export const authConfig = {
     authorized({ auth, request: { nextUrl } }) {
       let isLoggedIn = !!auth?.user;
       let isOnDashboard = nextUrl.pathname.startsWith('/home');
-      
+      const url = nextUrl.clone();
+      if (url.pathname === '/') {
+        url.pathname = '/home';
+        return NextResponse.redirect(url);
+      }
 
       if (isOnDashboard) {
         if (isLoggedIn) return true;

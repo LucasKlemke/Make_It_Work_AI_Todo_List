@@ -7,7 +7,7 @@ import Image from 'next/image';
 export default function Login() {
   return (
     <div className="flex h-screen overflow-hidden flex-col md:flex-row">
-      <div className="hidden md:flex md:w-1/2 bg-primary p-10 text-white flex-col justify-between">
+      <div className="hidden md:flex md:w-1/2 bg-primary backdrop-blur-sm p-10 text-white dark:text-black flex-col justify-between">
         <div className="flex items-center gap-x-3">
           <p className="text-4xl bg-gradient-to-r inline-block text-transparent bg-clip-text from-blue-600 to-pink-400">
             Make it Work

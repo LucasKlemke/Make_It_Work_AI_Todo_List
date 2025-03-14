@@ -32,7 +32,7 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <main className="min-h-screen  flex flex-col gap-y-6">
+          <main className="min-h-screen   flex flex-col gap-y-6">
             {children}
           </main>
           <Toaster />

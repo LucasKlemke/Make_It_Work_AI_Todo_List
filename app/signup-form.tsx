@@ -147,7 +147,7 @@ export function SignUpForm({ action }: { action: (data: FormData) => void }) {
         />
         <Button
           type="submit"
-          className="w-full bg-primary text-white py-2 rounded-md hover:bg-primary/90 transition flex items-center justify-center"
+          className="w-full bg-primary  py-2 rounded-md hover:bg-primary/90 transition flex items-center justify-center"
         >
           Completar cadastro
           <ArrowRight className="ml-2 h-4 w-4" />
