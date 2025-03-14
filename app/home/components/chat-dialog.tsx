@@ -21,6 +21,7 @@ import {
 import PlanBlock from './plan-block';
 import { Loader2 } from 'lucide-react';
 import Image from 'next/image';
+import SignOutButton from '../sign-out-button';
 
 export function ChatDialog({
   open,
@@ -155,6 +156,9 @@ export function ChatDialog({
                     </div>
                   </div>
                 </div>
+              </div>
+              <div className="flex pt-5">
+                <SignOutButton />
               </div>
             </div>
           )}
