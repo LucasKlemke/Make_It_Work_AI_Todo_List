@@ -62,7 +62,7 @@ export default function page() {
         />
       </div>
 
-      {goals && (
+      {goals && goals.length > 0 && (
         <div className="grid grid-cols-6 w-full gap-3">
           <TasksBlock goal={goals[0]} />
           <SettingsBlock goal={goals[0]} />

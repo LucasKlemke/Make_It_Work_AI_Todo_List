@@ -67,7 +67,7 @@ export default function Login() {
       </div>
 
       {/* Right side - Login form */}
-      <div className="flex-1 flex flex-col p-6 md:p-10 justify-center md:justify-between">
+      <div className="flex-1 bg-background flex flex-col p-6 md:p-10 justify-center md:justify-between">
         {/* Mobile logo */}
         <div className="md:hidden mb-8">
           <div className="flex items-center gap-x-3">
