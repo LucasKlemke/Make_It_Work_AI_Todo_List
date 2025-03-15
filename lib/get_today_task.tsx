@@ -1,6 +1,6 @@
 'use server';
 
-import { getMonthlyGoal, getTasks } from '@/db/schema';
+import { getAllTasks, getMonthlyGoal, getTasks, updateTask } from '@/db/schema';
 
 export async function getTodayTask(monthlyGoalId: number, currentDate: Date) {
   console.log(currentDate);
@@ -12,4 +12,12 @@ export async function getTodayTask(monthlyGoalId: number, currentDate: Date) {
 export async function getCurrentGoal(userId) {
   const goal = await getMonthlyGoal(userId);
   return goal;
+}
+
+export async function updateTaskDay(taskId: number, completedAt: Date) {
+  return await updateTask(taskId, completedAt);
+}
+
+export async function getTodasTasks(goalId: number) {
+  return getAllTasks(goalId);
 }

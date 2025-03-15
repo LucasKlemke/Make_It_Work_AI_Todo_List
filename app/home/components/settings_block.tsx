@@ -1,7 +1,7 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { Hourglass, Settings, Target, User, UserPen } from 'lucide-react';
-import React from 'react';
+import React, { useEffect } from 'react';
 import SignOutButton from '../sign-out-button';
 import { useSession } from 'next-auth/react';
 import {
@@ -12,11 +12,24 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { ChatDialog } from './chat-dialog';
 import { Card } from '@/components/ui/card';
+import { getTodasTasks } from '@/lib/get_today_task';
+import { Goals } from '@/db/schema';
 
-const SettingsBlock = ({ goal }) => {
+const SettingsBlock = ({ goal }: { goal: Goals }) => {
   const { data: session } = useSession();
+  const [tasks, setTasks] = React.useState(null);
+  const [isLoading, setIsLoading] = React.useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      await getTodasTasks(goal.id).then((tasks) => setTasks(tasks));
+      setIsLoading(false);
+    };
+
+    fetchData();
+  }, [goal]);
 
   return (
     <>
@@ -43,8 +56,8 @@ const SettingsBlock = ({ goal }) => {
             </div>
             <div className="flex md:flex-col lg:flex-row md:gap-y-2 gap-x-2">
               <DropdownMenu>
-                <DropdownMenuTrigger>
-                  <Button>
+                <DropdownMenuTrigger >
+                  <Button className='w-full'>
                     <Settings />
                     Configurações
                   </Button>
@@ -66,26 +79,65 @@ const SettingsBlock = ({ goal }) => {
             </div>
             <div>
               <p className="font-semibold pb-2">Tarefas</p>
-              <div className="grid grid-cols-3 gap-2">
-                <Card className="col-span-1  flex flex-col w-full h-full justify-center items-center">
-                  <p className="text-lg">Concluídas</p>
-                  <div className="flex p-3 flex-col">
-                    <p className="text-3xl">20</p>
-                  </div>
-                </Card>
-                <Card className="col-span-1  flex flex-col w-full h-full justify-center items-center">
-                  <p className="text-lg">Restantes</p>
-                  <div className="flex p-3 flex-col">
-                    <p className="text-3xl">20</p>
-                  </div>
-                </Card>
-                <Card className="col-span-1  flex flex-col w-full h-full justify-center items-center">
-                  <p className="text-lg">Progresso</p>
-                  <div className="flex p-3 flex-col">
-                    <p className="text-3xl">50%</p>
-                  </div>
-                </Card>
-              </div>
+              {isLoading ? (
+                <div className="grid grid-cols-3 gap-2">
+                  <Card className="col-span-1  flex flex-col w-full h-full justify-center items-center">
+                    <p className="text-lg">Concluídas</p>
+                    {/* <div className="flex p-3 flex-col">
+                      <p className="text-3xl">20</p>
+                    </div> */}
+                  </Card>
+                  <Card className="col-span-1  flex flex-col w-full h-full justify-center items-center">
+                    <p className="text-lg">Restantes</p>
+                    {/* <div className="flex p-3 flex-col">
+                      <p className="text-3xl">20</p>
+                    </div> */}
+                  </Card>
+                  <Card className="col-span-1  flex flex-col w-full h-full justify-center items-center">
+                    <p className="text-lg">Progresso</p>
+                    {/* <div className="flex p-3 flex-col">
+                      <p className="text-3xl">50%</p>
+                    </div> */}
+                  </Card>
+                </div>
+              ) : (
+                <div className="grid grid-cols-3 md:grid-cols-1 lg:grid-cols-3 gap-2">
+                  <Card className="col-span-1  flex flex-col w-full h-full justify-center items-center bg-emerald-200 dark:bg-emerald-800">
+                    <p className="text-lg">Concluídas</p>
+                    <div
+                      onClick={() => console.log(tasks)}
+                      className="flex p-3 flex-col"
+                    >
+                      <p className="text-3xl">
+                        {tasks?.filter((task) => task.completedAt).length}
+                      </p>
+                    </div>
+                  </Card>
+                  <Card className="col-span-1  flex flex-col w-full h-full justify-center items-center bg-blue-200 dark:bg-blue-800">
+                    <p className="text-lg">Restantes</p>
+                    <div className="flex p-3 flex-col">
+                      <p className="text-3xl">
+                        {
+                          tasks?.filter((task) => task.completedAt === null)
+                            .length
+                        }
+                      </p>
+                    </div>
+                  </Card>
+                  <Card
+                    className={`col-span-1  flex flex-col w-full h-full justify-center items-center bg-pink-200 dark:bg-pink-800`}
+                  >
+                    <p className="text-lg">Progresso</p>
+                    <div className="flex p-3 flex-col">
+                      <p className="text-3xl">
+                        {tasks
+                          ? `${Math.round((tasks.filter((task) => task.completedAt).length / tasks.length) * 100)}%`
+                          : '0%'}
+                      </p>
+                    </div>
+                  </Card>
+                </div>
+              )}
             </div>
           </div>
         </div>

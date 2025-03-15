@@ -16,6 +16,13 @@ export async function getUser(email: string) {
   return await db.select().from(usersTable).where(eq(usersTable.email, email));
 }
 
+export async function getAllTasks(monthlyGoalId: number) {
+  return await db
+    .select()
+    .from(tasksTable)
+    .where(and(eq(tasksTable.monthlyGoalId, monthlyGoalId)));
+}
+
 export async function createUser(
   name: string,
   age: number,
@@ -38,7 +45,7 @@ export async function createUser(
   });
 }
 
-export async function createMonthlyGoal(
+export async function createGoal(
   userId: string,
   objective: string,
   description: string,
@@ -107,6 +114,13 @@ export const createTasks = async (tasks: InsertTask[]) => {
   return await db.insert(tasksTable).values(tasks);
 };
 
+export const updateTask = async (taskId: number, completedAt: Date) => {
+  return await db
+    .update(tasksTable)
+    .set({ completedAt })
+    .where(eq(tasksTable.id, taskId));
+};
+
 export const getTasks = async (monthlyGoalId: number, currentDate: Date) => {
   const formatedDate = new Date(currentDate);
   formatedDate.setHours(3, 0, 0, 0);
@@ -127,6 +141,36 @@ export const getMonthlyGoal = async (userId: string) => {
     .select()
     .from(monthlyGoalsTable)
     .where(eq(monthlyGoalsTable.userId, userId));
+};
+
+export const getGoal = async (goalId: number) => {
+  return await db
+    .select()
+    .from(monthlyGoalsTable)
+    .where(eq(monthlyGoalsTable.id, goalId));
+};
+
+export const getGoals = async (userId: string) => {
+  return await db
+    .select()
+    .from(monthlyGoalsTable)
+    .where(eq(monthlyGoalsTable.userId, userId));
+};
+
+export const getTasks1 = async (goalId: number) => {
+  return await db
+    .select()
+    .from(tasksTable)
+    .where(eq(tasksTable.monthlyGoalId, goalId));
+};
+
+export const getTask = async (task_id: number, goal_id: number) => {
+  return await db
+    .select()
+    .from(tasksTable)
+    .where(
+      and(eq(tasksTable.id, task_id), eq(tasksTable.monthlyGoalId, goal_id))
+    );
 };
 
 export const sessions = pgTable('session', {
@@ -210,5 +254,6 @@ export type InsertMonthlyGoal = typeof monthlyGoalsTable.$inferInsert;
 export type SelectMonthlyGoal = typeof monthlyGoalsTable.$inferSelect;
 
 export type Tasks = InferSelectModel<typeof tasksTable>;
+export type Goals = InferSelectModel<typeof monthlyGoalsTable>;
 export type InsertTask = typeof tasksTable.$inferInsert;
 export type SelectTask = typeof tasksTable.$inferSelect;
