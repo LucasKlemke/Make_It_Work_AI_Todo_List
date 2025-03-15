@@ -1,6 +1,6 @@
-<img loading="lazy" src="./logo_to_do.png" width="100" height="100"/>
+<img loading="lazy" src="/logo_to_do.png" width="100" height="100"/>
 
-# To-Do List com Objetivos de Aprendizado
+# Make It Work - Defina suas metas através de IA
 
 ## Domínio do Problema (Escopo)
 
