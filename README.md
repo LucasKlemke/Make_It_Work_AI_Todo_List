@@ -1,4 +1,4 @@
-<img loading="lazy" src="/logo_to_do.png" width="100" height="100"/>
+<img loading="lazy" src="./public/logo_to_do.png" width="100" height="100"/>
 
 # Make It Work - Defina suas metas através de IA
 
