@@ -2,6 +2,8 @@
 
 # Make It Work - Defina suas metas através de IA
 
+<img loading="lazy" src="./public/system_print.png" width="900" height="600"/>
+
 ## Domínio do Problema (Escopo)
 
 Este aplicativo tem como objetivo ajudar os usuários a atingirem suas metas e objetivos de aprendizado, seja para desenvolver uma nova habilidade, praticar um hobby ou atingir qualquer tipo de meta pessoal. O sistema gera tarefas diárias baseadas no objetivo do usuário, acompanha o progresso e ajusta o cronograma automaticamente em caso de atrasos. O usuário é mantido motivado por meio de feedbacks, e o sistema garante que ele só inicie um novo objetivo após concluir o atual.
