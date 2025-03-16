@@ -60,7 +60,7 @@ export default function page() {
               / de ([a-z])/,
               (match, p1) => ` de ${isNaN(p1) ? p1.toUpperCase() : p1}`
             )}
-          className="text-3xl"
+          className="text-lg md:text-3xl"
         />
       </div>
 

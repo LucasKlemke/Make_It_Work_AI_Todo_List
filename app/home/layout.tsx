@@ -32,7 +32,7 @@ export default async function RootLayout({
         <nav className=" bg-background dark:bg-neutral-900 w-full top-2 dark:drop-shadow-none drop-shadow-md border rounded-2xl">
           <div className="flex justify-between   items-center p-4 gap-x-3 ">
             <div className="flex items-center gap-x-3">
-              <p className="text-4xl bg-gradient-to-r inline-block text-transparent bg-clip-text from-blue-600 to-pink-400">
+              <p className="text-2xl md:text-4xl bg-gradient-to-r inline-block text-transparent bg-clip-text from-blue-600 to-pink-400">
                 Make it Work
               </p>
               <Image

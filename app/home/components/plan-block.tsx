@@ -71,7 +71,7 @@ const PlanBlock = ({
           <div className="flex flex-col gap-2">
             <div className="flex items-center w-full justify-between">
               <div className="flex gap-x-3">
-                <p className="text-4xl bg-gradient-to-r inline-block text-transparent bg-clip-text from-blue-600 to-pink-400">
+                <p className=" text-2xl md:text-4xl bg-gradient-to-r inline-block text-transparent bg-clip-text from-blue-600 to-pink-400">
                   Make it Work
                 </p>
                 <Image

@@ -13,7 +13,7 @@ import { useChat } from '@ai-sdk/react';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import PlanBlock from './plan-block';
-import { Loader2 } from 'lucide-react';
+import { Loader2, SendHorizonal } from 'lucide-react';
 import Image from 'next/image';
 import SignOutButton from '../sign-out-button';
 import { ThemeSwitcher } from '@/components/theme-switcher';
@@ -51,8 +51,8 @@ export function ChatDialog({
             Antes de começar, vamos criar um plano para os próximos 30 dias.
           </DialogDescription>
         </DialogHeader>
-        <div className="grid grid-cols-2 gap-5">
-          <ScrollArea className="flex lg:col-span-1 col-span-2 h-[40vh] lg:h-[70vh] order-2 lg:order-1 flex-col w-full lg:max-w-md py-12 lg:py-24 lg:mx-auto stretch">
+        <div className="grid grid-cols-2 gap-5 text-sm md:text-base">
+          <ScrollArea className="flex lg:col-span-1 col-span-2 h-[30vh] md:h-[40vh] lg:h-[70vh] order-2 lg:order-1 flex-col w-full lg:max-w-md py-12 lg:py-24 lg:mx-auto stretch">
             <div
               className={`whitespace-pre-wrap p-4 my-2 rounded-lg    self-start`}
             >
@@ -95,7 +95,7 @@ export function ChatDialog({
                 handleSubmit(e);
                 setIsLoading(true);
               }}
-              className="fixed bottom-0 w-full max-w-screen-md lg:max-w-md p-2 mb-8 flex items-center"
+              className="fixed bottom-0 w-full max-w-xs lg:max-w-md p-2 mb-8 flex items-center"
             >
               <Input
                 disabled={isLoading}
@@ -106,19 +106,19 @@ export function ChatDialog({
                 }
                 onChange={handleInputChange}
               />
-              <Button type="submit" disabled={isLoading} className="ml-2">
-                Enviar
+              <Button type="submit" size={'icon'} disabled={isLoading} className="md:ml-2">
+                <SendHorizonal/>
               </Button>
             </form>
           </ScrollArea>
           {plan ? (
             <PlanBlock plan={plan} onClose={onClose} />
           ) : (
-            <div className="lg:h-[70vh] col-span-2 lg:col-span-1 order-1 lg:order-2 shadow-md p-5 border rounded-xl">
+            <ScrollArea className="lg:h-[70vh] md:h-auto h-[40vh] col-span-2 lg:col-span-1 order-1 lg:order-2 shadow-md p-5 border rounded-xl">
               <div className="flex flex-col items-start gap-y-3">
                 <div className="flex items-center w-full justify-between">
                   <div className="flex gap-x-3">
-                    <p className="text-4xl bg-gradient-to-r inline-block text-transparent bg-clip-text from-blue-600 to-pink-400">
+                    <p className=" text-2xl md:text-4xl bg-gradient-to-r inline-block text-transparent bg-clip-text from-blue-600 to-pink-400">
                       Make it Work
                     </p>
                     <Image
@@ -132,17 +132,17 @@ export function ChatDialog({
                   <ThemeSwitcher />
                 </div>
 
-                <div className="mt-4">
-                  <p className="text-start font-light text-5xl ">
+                <div className=" md:mt-4">
+                  <p className="text-start font-light text-lg md:text-5xl ">
                     Olá, {session?.user?.name}!
                   </p>
                   <div className="mt-4">
-                    <p className="text-muted-foreground">
+                    <p className="text-sm md:text-base text-muted-foreground">
                       Antes de começar, precisamos que você explique melhor o
                       que deseja alcançar nos próximos 30 dias. Sarah está aqui
                       para te ajudar a decidir.
                     </p>
-                    <div className="mt-4">
+                    <div className=" md:mt-4 text-sm md:text-base">
                       <p className=" mt-2">
                         1. Defina os objetivos que deseja alcançar nos próximos
                         30 dias.
@@ -164,7 +164,7 @@ export function ChatDialog({
               <div className="flex pt-5 w-full justify-end">
                 <SignOutButton />
               </div>
-            </div>
+            </ScrollArea>
           )}
         </div>
       </DialogContent>
