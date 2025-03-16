@@ -32,6 +32,7 @@ export const {
     async session({ session, token }) {
       // Adiciona o ID ao objeto session.user
       if (session?.user) {
+        // @ts-ignore
         session.user.id = token.id;
       }
       return session;

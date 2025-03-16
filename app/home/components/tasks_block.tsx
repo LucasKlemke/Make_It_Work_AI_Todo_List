@@ -46,19 +46,20 @@ const TasksBlock = ({ goal }: { goal: Goals }) => {
       {tasks && tasks.length > 0 && (
         <Tasks
           handleSubmit={handleSubmit}
-          tasks={tasks.filter((task) => {
-            const today = new Date();
-            const formatedDate = new Date(today);
-            formatedDate.setHours(3, 0, 0, 0);
-            // Convert task.taskDate to a Date object if it's a string
-            const taskDate = new Date(task.taskDate);
+          // tasks={tasks.filter((task) => {
+          //   const today = new Date();
+          //   const formatedDate = new Date(today);
+          //   formatedDate.setHours(3, 0, 0, 0);
+          //   // Convert task.taskDate to a Date object if it's a string
+          //   const taskDate = new Date(task.taskDate);
 
-            // Set hours to 3:00:00 for consistent comparison
-            taskDate.setHours(3, 0, 0, 0);
+          //   // Set hours to 3:00:00 for consistent comparison
+          //   taskDate.setHours(3, 0, 0, 0);
 
-            // Compare the timestamps for value equality
-            return taskDate.getTime() === formatedDate.getTime();
-          })}
+          //   // Compare the timestamps for value equality
+          //   return taskDate.getTime() === formatedDate.getTime();
+          // })}
+          tasks={tasks}
         />
       )}
 

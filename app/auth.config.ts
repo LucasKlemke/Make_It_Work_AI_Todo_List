@@ -3,6 +3,7 @@ import NextAuthConfig from 'next-auth';
 import { NextResponse } from 'next/server';
 
 export const authConfig = {
+  // @ts-ignore
   pages: {
     signIn: '/login',
   },
@@ -11,6 +12,7 @@ export const authConfig = {
     // while this file is also used in non-Node.js environments
   ],
   callbacks: {
+    // @ts-ignore
     authorized({ auth, request: { nextUrl } }) {
       let isLoggedIn = !!auth?.user;
       let isOnDashboard = nextUrl.pathname.startsWith('/home');

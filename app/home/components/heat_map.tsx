@@ -69,7 +69,7 @@ const HeatMap: React.FC<HeatMapProps> = ({ tasks }) => {
     if (checkedTasks[index] > 0) {
       return 'bg-green-500';
     } else if (upcomingTasks[index] > 0) {
-      return 'bg-blue-200';
+      return 'bg-gray-400';
     } else {
       return 'bg-gray-200';
     }

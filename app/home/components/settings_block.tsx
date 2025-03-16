@@ -115,7 +115,7 @@ const SettingsBlock = ({ goal }: { goal: Goals }) => {
             <div className="flex md:flex-col lg:flex-row md:gap-y-2 gap-x-2">
               <DropdownMenu>
                 <DropdownMenuTrigger>
-                  <Button className="w-full">
+                  <Button variant='outline' className="w-full">
                     <Settings />
                     Configurações
                   </Button>
