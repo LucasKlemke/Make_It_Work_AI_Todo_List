@@ -61,25 +61,41 @@ const HeatMap: React.FC<HeatMapProps> = ({ tasks }) => {
     (count) => count === maxUpcomingCount
   );
 
-  // Função para determinar o background de cada célula:
-  // - Se houver tarefas concluídas, aplica fundo verde (prioritário).
-  // - Se não houver tarefas concluídas, mas houver tarefas agendadas, aplica fundo azul claro.
-  // - Caso contrário, aplica um estilo "disabled" (fundo cinza).
-  const getCellStyle = (index: number) => {
-    if (checkedTasks[index] > 0) {
-      return 'bg-green-500';
-    } else if (upcomingTasks[index] > 0) {
-      return 'bg-gray-400';
-    } else {
-      return 'bg-gray-200';
-    }
-  };
-
   // 5. Função para obter a data correspondente a cada índice a partir de userCreatedAt
   const getDateFromIndex = (index: number) => {
     const date = new Date(userCreatedAt);
     date.setDate(date.getDate() + index);
     return date;
+  };
+
+  // 6. Função para determinar o background de cada célula:
+  // - Se todas as tarefas do dia foram concluídas, retorna verde.
+  // - Se houver tarefas pendentes:
+  //    - Se o dia é passado, retorna vermelho (indicando falha em concluir).
+  //    - Caso contrário (hoje ou futuro), retorna cinza.
+  // - Se não houver tarefas, retorna um cinza claro.
+  const getCellStyle = (index: number) => {
+    const date = getDateFromIndex(index);
+    const cellDate = new Date(date);
+    cellDate.setHours(0, 0, 0, 0);
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+    const total = checkedTasks[index] + upcomingTasks[index];
+    if (total > 0) {
+      if (checkedTasks[index] === total) {
+        // Todas as tarefas concluídas
+        return 'bg-green-500';
+      } else {
+        // Tarefas pendentes
+        if (cellDate < currentDate) {
+          return 'bg-red-200 dark:bg-red-400';
+        } else {
+          return 'bg-gray-400';
+        }
+      }
+    } else {
+      return 'bg-gray-200';
+    }
   };
 
   return (
@@ -123,14 +139,28 @@ const HeatMap: React.FC<HeatMapProps> = ({ tasks }) => {
                         {date.getFullYear()}
                       </p>
                       <p>{checkedTasks[index]} tarefas concluídas</p>
-                      {upcomingTasks[index] > 0 && (
-                        <p>{upcomingTasks[index]} tarefas para completar</p>
-                      )}
-                      {isMaxUpcoming && (
-                        <p className="font-bold">
-                          Dia com mais tarefas para completar!
-                        </p>
-                      )}
+                      {(() => {
+                        const cellDate = new Date(date);
+                        cellDate.setHours(0, 0, 0, 0);
+                        const currentDate = new Date();
+                        currentDate.setHours(0, 0, 0, 0);
+                        if (
+                          cellDate < currentDate &&
+                          upcomingTasks[index] > 0
+                        ) {
+                          return (
+                            <p className="text-destructive">
+                              Você deixou de concluir {upcomingTasks[index]}{' '}
+                              tarefa(s)
+                            </p>
+                          );
+                        } else if (upcomingTasks[index] > 0) {
+                          return (
+                            <p>{upcomingTasks[index]} tarefas para completar</p>
+                          );
+                        }
+                        return null;
+                      })()}
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>

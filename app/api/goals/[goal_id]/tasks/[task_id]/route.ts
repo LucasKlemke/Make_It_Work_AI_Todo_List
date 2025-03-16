@@ -1,6 +1,6 @@
-// app/api/tasks/route.ts
+// app/api/goals/[goal_id]/tasks/[task_id]/route.ts
 import { NextResponse } from 'next/server';
-import { getTask, getTasks1 } from '@/db/schema'; // Ajuste o caminho conforme sua estrutura
+import { getTask } from '@/db/schema'; // Ajuste o caminho conforme sua estrutura
 
 export async function GET(
   req: Request,

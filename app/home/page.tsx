@@ -7,6 +7,8 @@ import { useSession } from 'next-auth/react';
 import { ChatDialog } from './components/chat-dialog';
 import { toast } from 'sonner';
 import { Goals } from '@/db/schema';
+import { Content } from 'next/font/google';
+import HomeContent from './components/content';
 
 export default function page() {
   const { data: session } = useSession();
@@ -62,12 +64,8 @@ export default function page() {
         />
       </div>
 
-      {goals && goals.length > 0 && (
-        <div className="grid grid-cols-6 w-full gap-3">
-          <TasksBlock goal={goals[0]} />
-          <SettingsBlock goal={goals[0]} />
-        </div>
-      )}
+      <HomeContent goals={goals || []} />
+
       {isModalOpen && (
         <ChatDialog open={isModalOpen} onClose={() => setIsModalOpen(false)} />
       )}

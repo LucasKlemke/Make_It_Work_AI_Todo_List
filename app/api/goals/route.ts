@@ -1,4 +1,4 @@
-import { createGoal, createTasks, getGoals } from '@/db/schema';
+import { createGoal, createTasks } from '@/db/schema';
 import { NextResponse } from 'next/server';
 
 

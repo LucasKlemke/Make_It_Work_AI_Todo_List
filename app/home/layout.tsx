@@ -49,7 +49,7 @@ export default async function RootLayout({
         </nav>
       </div>
 
-      <SessionProvider>{children}</SessionProvider>
+      <SessionProvider refetchOnWindowFocus={false}>{children}</SessionProvider>
     </div>
   );
 }

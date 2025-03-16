@@ -1,16 +1,6 @@
 import React from 'react';
-import { Markdown } from '@/components/markdown';
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { useChat } from '@ai-sdk/react';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import {
@@ -22,25 +12,50 @@ import {
 import { Check, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import Image from 'next/image';
+import { ThemeSwitcher } from '@/components/theme-switcher';
 
-const PlanBlock = ({ plan, onClose }: { plan: any; onClose: () => void }) => {
+const PlanBlock = ({
+  plan,
+  onClose,
+}: {
+  plan: {
+    userId: string;
+    objective: string;
+    description: string;
+    methodology: string;
+    planning: {
+      week: number;
+      days: {
+        day: number;
+        tasks: {
+          name: string;
+          duration: number | null;
+        }[];
+      }[];
+    }[];
+  };
+  onClose: () => void;
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const { data: session } = useSession();
   const handleCreatePlan = async () => {
     setIsLoading(true);
     console.log(session?.user);
     const userId = await session?.user?.id;
+
     try {
       await fetch('/api/goals', {
         method: 'POST',
         body: JSON.stringify({
-          userId: userId,
+          // @ts-ignore
+          userId,
           ...plan,
         }),
       });
       toast('Plano criado com sucesso');
     } catch (error) {
       toast('Erro ao criar plano');
+      // @ts-ignore
       toast(error.message);
       console.error(error);
     }
@@ -50,20 +65,24 @@ const PlanBlock = ({ plan, onClose }: { plan: any; onClose: () => void }) => {
   };
 
   return (
-    <div className="shadow-md rounded-xl">
-      <ScrollArea className="border-l h-[65vh] p-3  flex flex-col">
+    <div className=" shadow-md rounded-xl  dark:border col-span-2 lg:col-span-1 order-1 lg:order-2">
+      <ScrollArea className="h-[35vh] lg:h-[65vh] p-3  flex flex-col">
         <div className="flex flex-col gap-5">
           <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-x-3">
-              <p className="text-4xl bg-gradient-to-r inline-block text-transparent bg-clip-text from-blue-600 to-pink-400">
-                Make it Work
-              </p>
-              <Image
-                src={'/logo_to_do.png'}
-                width={30}
-                height={30}
-                alt={'xxx'}
-              />
+            <div className="flex items-center w-full justify-between">
+              <div className="flex gap-x-3">
+                <p className="text-4xl bg-gradient-to-r inline-block text-transparent bg-clip-text from-blue-600 to-pink-400">
+                  Make it Work
+                </p>
+                <Image
+                  src={'/logo_to_do.png'}
+                  width={30}
+                  height={30}
+                  alt={'xxx'}
+                />
+              </div>
+
+              <ThemeSwitcher />
             </div>
             <div className="flex flex-col gap-2">
               <p>
@@ -127,7 +146,7 @@ const PlanBlock = ({ plan, onClose }: { plan: any; onClose: () => void }) => {
           disabled={isLoading}
           className="w-full"
         >
-          Confirmar{' '}
+          Confirmar
           {isLoading ? <Loader2 className="animate-spin" /> : <Check />}
         </Button>
       </div>

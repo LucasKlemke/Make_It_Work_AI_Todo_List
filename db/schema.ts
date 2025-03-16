@@ -7,6 +7,7 @@ import {
   boolean,
   primaryKey,
 } from 'drizzle-orm/pg-core';
+// @ts-ignore
 import type { AdapterAccount } from 'next-auth/adapters';
 import { db } from './index';
 import { eq, gte, and, InferSelectModel } from 'drizzle-orm';
@@ -14,13 +15,6 @@ import { genSaltSync, hashSync } from 'bcrypt-ts';
 
 export async function getUser(email: string) {
   return await db.select().from(usersTable).where(eq(usersTable.email, email));
-}
-
-export async function getAllTasks(monthlyGoalId: number) {
-  return await db
-    .select()
-    .from(tasksTable)
-    .where(and(eq(tasksTable.monthlyGoalId, monthlyGoalId)));
 }
 
 export async function createUser(
@@ -70,6 +64,47 @@ export async function createGoal(
   return result[0]?.id;
 }
 
+export const createTasks = async (tasks: InsertTask[]) => {
+  return await db.insert(tasksTable).values(tasks);
+};
+
+export const updateTask = async (taskId: number, completedAt: Date) => {
+  return await db
+    .update(tasksTable)
+    .set({ completedAt })
+    .where(eq(tasksTable.id, taskId));
+};
+
+export const getGoal = async (goalId: number) => {
+  return await db
+    .select()
+    .from(monthlyGoalsTable)
+    .where(eq(monthlyGoalsTable.id, goalId));
+};
+
+export const getGoals = async (userId: string) => {
+  return await db
+    .select()
+    .from(monthlyGoalsTable)
+    .where(eq(monthlyGoalsTable.userId, userId));
+};
+
+export const getTasks1 = async (goalId: number) => {
+  return await db
+    .select()
+    .from(tasksTable)
+    .where(eq(tasksTable.monthlyGoalId, goalId));
+};
+
+export const getTask = async (task_id: number, goal_id: number) => {
+  return await db
+    .select()
+    .from(tasksTable)
+    .where(
+      and(eq(tasksTable.id, task_id), eq(tasksTable.monthlyGoalId, goal_id))
+    );
+};
+
 // Tabela de usuários com informações de verificação e data de cadastro
 export const usersTable = pgTable('users_table', {
   id: text('id')
@@ -109,69 +144,6 @@ export const accounts = pgTable(
     },
   ]
 );
-
-export const createTasks = async (tasks: InsertTask[]) => {
-  return await db.insert(tasksTable).values(tasks);
-};
-
-export const updateTask = async (taskId: number, completedAt: Date) => {
-  return await db
-    .update(tasksTable)
-    .set({ completedAt })
-    .where(eq(tasksTable.id, taskId));
-};
-
-export const getTasks = async (monthlyGoalId: number, currentDate: Date) => {
-  const formatedDate = new Date(currentDate);
-  formatedDate.setHours(3, 0, 0, 0);
-
-  return await db
-    .select()
-    .from(tasksTable)
-    .where(
-      and(
-        eq(tasksTable.monthlyGoalId, monthlyGoalId),
-        eq(tasksTable.taskDate, formatedDate)
-      )
-    );
-};
-
-export const getMonthlyGoal = async (userId: string) => {
-  return await db
-    .select()
-    .from(monthlyGoalsTable)
-    .where(eq(monthlyGoalsTable.userId, userId));
-};
-
-export const getGoal = async (goalId: number) => {
-  return await db
-    .select()
-    .from(monthlyGoalsTable)
-    .where(eq(monthlyGoalsTable.id, goalId));
-};
-
-export const getGoals = async (userId: string) => {
-  return await db
-    .select()
-    .from(monthlyGoalsTable)
-    .where(eq(monthlyGoalsTable.userId, userId));
-};
-
-export const getTasks1 = async (goalId: number) => {
-  return await db
-    .select()
-    .from(tasksTable)
-    .where(eq(tasksTable.monthlyGoalId, goalId));
-};
-
-export const getTask = async (task_id: number, goal_id: number) => {
-  return await db
-    .select()
-    .from(tasksTable)
-    .where(
-      and(eq(tasksTable.id, task_id), eq(tasksTable.monthlyGoalId, goal_id))
-    );
-};
 
 export const sessions = pgTable('session', {
   sessionToken: text('sessionToken').primaryKey(),

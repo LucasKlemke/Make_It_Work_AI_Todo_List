@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Tasks as TasksType } from '@/db/schema';
-import { Check, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Award, Check, ChevronLeft, ChevronRight, X } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useReward } from 'react-rewards';
 
@@ -32,7 +32,7 @@ const Tasks = ({
   }, [tasks]);
 
   // Estado para a data selecionada:
-  // se hoje estiver entre as datas disponíveis, inicia com hoje; senão, usa a primeira data disponível.
+  // Se hoje estiver entre as datas disponíveis, inicia com hoje; senão, usa a primeira data disponível.
   const [selectedDate, setSelectedDate] = useState(() => {
     const found = availableDates.find(
       (date) => date.getTime() === hoje.getTime()
@@ -50,7 +50,7 @@ const Tasks = ({
     }
   }, [availableDates, selectedDate]);
 
-  // Estado para as tasks filtradas de acordo com a data selecionada
+  // Estados para as tasks filtradas de acordo com a data selecionada e as tasks marcadas
   const [dayTasks, setDayTasks] = useState<TasksType[]>([]);
   const [checkedTasks, setCheckedTasks] = useState<number[]>([]);
 
@@ -69,6 +69,10 @@ const Tasks = ({
 
   // Verifica se a data selecionada é a data de hoje
   const isToday = selectedDate.getTime() === hoje.getTime();
+  // Verifica se a data selecionada é anterior ou posterior à data atual
+  const isPast = selectedDate.getTime() < hoje.getTime();
+  const isFuture = selectedDate.getTime() > hoje.getTime();
+
   // Calcula se todas as tasks do dia estão concluídas (caso existam tasks)
   const alreadyCompleted =
     dayTasks.length > 0 && dayTasks.every((task) => task.completedAt !== null);
@@ -81,7 +85,7 @@ const Tasks = ({
     }
   }, [alreadyCompleted, isToday, reward]);
 
-  // Função para marcar/desmarcar uma task (só ativa se for o dia atual)
+  // Função para marcar/desmarcar uma task (ativa apenas para o dia atual)
   const handleCheck = (id: number) => {
     if (!isToday) return;
     const newCheckedTasks = checkedTasks.includes(id)
@@ -124,9 +128,11 @@ const Tasks = ({
           }}
         />
         <div className="text-center">
-          {isToday && <p className="text-xl ">Hoje</p>}
+          {isToday && <p className="text-xl">Hoje</p>}
           <p
-            className={`font-bold ${isToday ? 'text-sm text-muted-foreground"' : 'text-xl'}`}
+            className={`font-bold ${
+              isToday ? 'text-sm text-muted-foreground' : 'text-xl'
+            }`}
           >
             {formattedSelectedDate}
           </p>
@@ -147,13 +153,18 @@ const Tasks = ({
 
       {/* Renderização das tasks */}
       {isToday && alreadyCompleted ? (
+        // Se for hoje e todas as tasks já estiverem concluídas, exibe a mensagem de parabéns
         <div>
           <div className="relative h-60">
             <div className="text-center absolute inset-0 z-50 backdrop-blur-md flex flex-col justify-center">
               <span id="rewardId" />
-              <p className="text-7xl bg-gradient-to-r text-transparent bg-clip-text from-blue-600 to-pink-400">
-                Parabéns!
-              </p>
+              <div className="flex gap-x-2 w-full items-center justify-center">
+                <p className="text-7xl bg-gradient-to-r text-transparent bg-clip-text from-blue-600 to-pink-400">
+                  Parabéns!
+                </p>
+                <Award className="h-12 w-12 dark:text-yellow-300 text-yellow-500" />
+              </div>
+
               <p className="text-lg flex gap-x-2 justify-center items-center text-muted-foreground mt-2">
                 <Check />
                 Todas as suas tarefas do dia atual foram concluídas.
@@ -180,22 +191,20 @@ const Tasks = ({
             </ScrollArea>
           </div>
         </div>
-      ) : (
+      ) : isToday ? (
+        // Visualização interativa para o dia atual (apenas tasks não concluídas)
         <ScrollArea className="h-60">
-          {dayTasks.map((task, idx) => {
-            if (isToday && task.completedAt !== null) return null;
-            return (
+          {dayTasks
+            .filter((task) => task.completedAt === null)
+            .map((task, idx) => (
               <div
                 onClick={() => handleCheck(task.id)}
                 key={`${idx}-task`}
-                className={`flex ${
-                  isToday ? 'cursor-pointer' : ''
-                } gap-x-3 items-center hover:bg-slate-50 dark:hover:bg-neutral-800 p-3 ${
+                className={`flex cursor-pointer gap-x-3 items-center hover:bg-slate-50 dark:hover:bg-neutral-800 p-3 ${
                   checkedTasks.includes(task.id) ? 'text-muted-foreground' : ''
                 }`}
               >
                 <Checkbox
-                  disabled={!isToday}
                   onClick={(e) => {
                     e.stopPropagation();
                     handleCheck(task.id);
@@ -206,9 +215,9 @@ const Tasks = ({
                 />
                 <div>
                   <p
-                    className={`${
+                    className={
                       checkedTasks.includes(task.id) ? 'line-through' : ''
-                    }`}
+                    }
                   >
                     {task.description}
                   </p>
@@ -220,12 +229,56 @@ const Tasks = ({
                   </p>
                 </div>
               </div>
-            );
-          })}
+            ))}
+        </ScrollArea>
+      ) : (
+        // Visualização somente leitura para dias que não são o dia atual
+        // Se for um dia anterior, aplica estilo especial (vermelho para pendentes);
+        // Se for um dia futuro, utiliza estilo padrão para tasks pendentes.
+        <ScrollArea className="h-60">
+          {dayTasks.map((task, idx) => (
+            <div
+              key={`${idx}-task`}
+              className="flex gap-x-3 items-center hover:bg-slate-50 dark:hover:bg-neutral-800 p-3"
+            >
+              {isPast ? (
+                <X className="text-destructive" />
+              ) : (
+                <Checkbox
+                  checked={task.completedAt !== null}
+                  disabled
+                  className="rounded-full"
+                />
+              )}
+
+              <div>
+                <p
+                  className={
+                    isPast
+                      ? task.completedAt !== null
+                        ? 'line-through text-muted-foreground'
+                        : 'text-destructive'
+                      : // Para dias futuros (isFuture), mantém o estilo padrão para pendentes
+                        task.completedAt !== null
+                        ? 'line-through text-muted-foreground'
+                        : 'text-base'
+                  }
+                >
+                  {task.description}
+                </p>
+                <p className="text-xs">
+                  Duração:{' '}
+                  {task.duration < 60
+                    ? `${task.duration} minutos`
+                    : `${(task.duration / 60).toFixed(1)} horas`}
+                </p>
+              </div>
+            </div>
+          ))}
         </ScrollArea>
       )}
 
-      {/* Botão de envio só aparece se for hoje e houver tasks pendentes */}
+      {/* Botão de envio só aparece para o dia atual se houver tasks pendentes */}
       {isToday && !alreadyCompleted && (
         <div className="flex justify-start w-full">
           <Button
