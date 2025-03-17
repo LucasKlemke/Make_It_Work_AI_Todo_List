@@ -44,7 +44,7 @@ export function ChatDialog({
 
   return (
     <Dialog open={open} onOpenChange={() => console.log('nada')}>
-      <DialogContent className="max-w-7xl">
+      <DialogContent className="md:max-w-7xl max-w-full overflow-y-scroll h-screen md:h-auto">
         <DialogHeader>
           <DialogTitle>Defina suas metas</DialogTitle>
           <DialogDescription onClick={() => console.log(plan)}>
@@ -95,7 +95,7 @@ export function ChatDialog({
                 handleSubmit(e);
                 setIsLoading(true);
               }}
-              className="fixed bottom-0 w-full max-w-xs lg:max-w-md p-2 mb-8 flex items-center"
+              className="fixed bottom-0 w-full p-10 lg:max-w-md lg:p-2 mb-8 flex items-center"
             >
               <Input
                 disabled={isLoading}
@@ -106,8 +106,13 @@ export function ChatDialog({
                 }
                 onChange={handleInputChange}
               />
-              <Button type="submit" size={'icon'} disabled={isLoading} className="md:ml-2">
-                <SendHorizonal/>
+              <Button
+                type="submit"
+                size={'icon'}
+                disabled={isLoading}
+                className="md:ml-2"
+              >
+                <SendHorizonal />
               </Button>
             </form>
           </ScrollArea>
