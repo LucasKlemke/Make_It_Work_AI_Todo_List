@@ -41,6 +41,7 @@ export async function POST(req: Request) {
   Observações:
   - Evite fazer muitas perguntas em uma só mensagem (máximo 1 pergunta por mensagem).
   - Sempre que possível, faça perguntas abertas para obter mais informações do usuário.
+  - Sempre gerar o plano através da tool 'createPlan'. Somente após execução desta tool que deverá ser informado ao usuário que a tool foi criada.
   `;
 
   const result = streamText({
