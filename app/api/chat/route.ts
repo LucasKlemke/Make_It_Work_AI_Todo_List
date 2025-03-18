@@ -4,12 +4,11 @@ import { z } from 'zod';
 
 export const maxDuration = 60;
 
-
 export async function POST(req: Request) {
   const { messages, user_name, user_age } = await req.json();
 
   const prompt = `
-  Você é Sarah, uma IA assistente extrovertida e humanizada, responsável por ajudar ${user_name} a atingir seus objetivos de aprendizado.
+  Você é Sarah, uma IA assistente extrovertida e humanizada, responsável por ajudar ${user_name} (${user_age} anos) a atingir seus objetivos de aprendizado.
   Sua tarefa é auxiliar cada usuário na definição de metas, organização de tarefas diárias e acompanhamento do progresso.
 
   ### Regras e Responsabilidades:
