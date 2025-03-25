@@ -9,10 +9,18 @@ import { toast } from 'sonner';
 import { Goals } from '@/db/schema';
 import { Content } from 'next/font/google';
 import HomeContent from './components/content';
+import { useShallow } from 'zustand/shallow';
+import { useGoalStore } from '@/lib/goal_store';
 
 export default function page() {
   const { data: session } = useSession();
-  const [goals, setGoals] = useState<Goals[] | null>(null);
+  // const { goals, setGoals } = useGoalStore((state) => ({
+  //   goals: state.goals,
+  //   setGoals: state.setGoals,
+  // }));
+  const [goals, setGoals] = useGoalStore(
+    useShallow((state) => [state.goals, state.setGoals])
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
@@ -64,7 +72,7 @@ export default function page() {
         />
       </div>
 
-      <HomeContent goals={goals || []} />
+      <HomeContent />
 
       {isModalOpen && (
         <ChatDialog open={isModalOpen} onClose={() => setIsModalOpen(false)} />

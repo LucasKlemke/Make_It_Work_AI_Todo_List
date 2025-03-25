@@ -7,6 +7,10 @@ import { useSession } from 'next-auth/react';
 import { Card } from '@/components/ui/card';
 import { Goals, Tasks as TasksType } from '@/db/schema';
 import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+import { useGoalStore } from '@/lib/goal_store';
+import { useShallow } from 'zustand/shallow';
 
 const frasesMotivacionais = [
   'A consistência é a chave para transformar sonhos em realidade.',
@@ -67,11 +71,10 @@ const frasesMotivacionais = [
 ];
 
 const SettingsBlock = ({
-  goal,
   tasks,
+  setGoals,
   setTasks,
 }: {
-  goal: Goals;
   tasks: TasksType[];
   setTasks: React.Dispatch<
     React.SetStateAction<
@@ -90,6 +93,25 @@ const SettingsBlock = ({
 }) => {
   const { data: session } = useSession();
   const [isLoading, setIsLoading] = React.useState(false);
+  const { removeGoal, currentGoal, } = useGoalStore(
+    useShallow((state) => ({
+      removeGoal: state.removeGoal,
+      currentGoal: state.currentGoal,
+    }))
+  );
+
+  const handleDeleteGoal = async () => {
+    try {
+      setIsLoading(true);
+      await removeGoal(currentGoal?.id);
+      toast.success('Objetivo deletado com sucesso');
+    } catch (error) {
+      toast.error('Erro ao deletar objetivo');
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <>
@@ -115,7 +137,7 @@ const SettingsBlock = ({
                         <p className="text-sm">Objetivo:</p>
                       </div>
                       <p className="text-xl font-extralight">
-                        {goal.objective}
+                        {currentGoal.objective}
                       </p>
                     </div>
                   </div>
@@ -201,7 +223,10 @@ const SettingsBlock = ({
                   </div>
                 </div>
                 <div className="flex h-full pt-10 justify-end md:gap-y-2 gap-x-2">
-                  <Button variant="destructive">
+                  <Button
+                    onClick={() => handleDeleteGoal()}
+                    variant="destructive"
+                  >
                     <Ban /> Abandonar objetivo
                   </Button>
                   <SignOutButton />

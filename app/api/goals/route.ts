@@ -1,4 +1,4 @@
-import { createGoal, createTasks } from '@/db/schema';
+import { createGoal, createTasks, deletePlan } from '@/db/schema';
 import { NextResponse } from 'next/server';
 
 
@@ -64,3 +64,4 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Erro ao criar goal' }, { status: 500 });
   }
 }
+

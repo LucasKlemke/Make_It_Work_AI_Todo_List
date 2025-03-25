@@ -3,21 +3,25 @@ import TasksBlock from './tasks_block';
 import SettingsBlock from './settings_block';
 import { Goals, Tasks as TasksType } from '@/db/schema';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useGoalStore } from '@/lib/goal_store';
+import { useShallow } from 'zustand/shallow';
 
-const HomeContent = ({ goals }: { goals: Goals[] }) => {
+const HomeContent = () => {
   const [tasks, setTasks] = useState<TasksType[] | null>(null);
-  const [currentGoal, setCurrentGoal] = useState<Goals | null>(null);
+  const { goals, setGoals, currentGoal, setCurrentGoal } = useGoalStore(
+    useShallow((state) => ({
+      goals: state.goals,
+      setGoals: state.setGoals,
+      currentGoal: state.currentGoal,
+      setCurrentGoal: state.setCurrentGoal,
+    }))
+  );
 
   useEffect(() => {
     if (goals && goals.length > 0) {
-      // Procura o goal mais recente, filtrando por data de criação
-      const mostRecentGoal = goals.reduce(
-        (latest, goal) => (goal.createdAt > latest.createdAt ? goal : latest),
-        goals[0]
-      );
 
       // Define o goal mais recente como o goal atual
-      setCurrentGoal(mostRecentGoal);
+      setCurrentGoal(goals[0]);
     }
   }, [goals]);
 
@@ -41,7 +45,7 @@ const HomeContent = ({ goals }: { goals: Goals[] }) => {
     return (
       <div className="grid grid-cols-6 w-full gap-3">
         <TasksBlock tasks={tasks} setTasks={setTasks} />
-        <SettingsBlock goal={currentGoal} tasks={tasks} setTasks={setTasks} />
+        <SettingsBlock tasks={tasks} setTasks={setTasks} />
       </div>
     );
   }

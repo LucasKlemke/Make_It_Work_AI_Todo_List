@@ -8,6 +8,14 @@
 
 Este aplicativo tem como objetivo ajudar os usuários a atingirem suas metas e objetivos de aprendizado, seja para desenvolver uma nova habilidade, praticar um hobby ou atingir qualquer tipo de meta pessoal. O sistema gera tarefas diárias baseadas no objetivo do usuário, acompanha o progresso e ajusta o cronograma automaticamente em caso de atrasos. O usuário é mantido motivado por meio de feedbacks, e o sistema garante que ele só inicie um novo objetivo após concluir o atual.
 
+## Objetivo do Software e Problema Resolvido
+
+O objetivo do software é simplificar o processo de definição e acompanhamento de metas, através de Inteligência Artificial, automatizando a criação de cronogramas personalizados e ajustando-os conforme o progresso do usuário. Ele resolve o problema de falta de organização e motivação, que muitas vezes impede as pessoas de atingirem seus objetivos. Além disso, o sistema garante que o usuário mantenha o foco em um objetivo por vez, promovendo maior comprometimento e eficiência.
+
+## Público-Alvo
+
+O público-alvo do "Make It Work" inclui estudantes, profissionais, autodidatas e qualquer pessoa que deseje alcançar metas pessoais ou profissionais de forma estruturada. As principais funcionalidades incluem:
+
 ### Funcionalidades principais:
 
 - **Objetivos personalizados**: O usuário define um objetivo (ex: aprender a tocar violão) para a IA e o aplicativo gera um cronograma com tarefas diárias específicas.

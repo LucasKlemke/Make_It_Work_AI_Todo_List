@@ -17,6 +17,12 @@ export async function getUser(email: string) {
   return await db.select().from(usersTable).where(eq(usersTable.email, email));
 }
 
+export async function deletePlan(goalId: number) {
+  return await db
+    .delete(monthlyGoalsTable)
+    .where(eq(monthlyGoalsTable.id, goalId));
+}
+
 export async function createUser(
   name: string,
   age: number,

@@ -6,7 +6,7 @@ async function main() {
   console.log('começou');
   const result = await generateText({
     model: openai.responses('gpt-4o-mini'),
-    prompt: 'Como funciona a homeostase ? Procure em 5 fontes diferentes',
+    prompt: 'Como funciona a homeostase ? Procure em 2 fontes diferentes',
     tools: {
       web_search_preview: openai.tools.webSearchPreview(),
     },
