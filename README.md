@@ -12,10 +12,9 @@ Este aplicativo tem como objetivo ajudar os usuários a atingirem suas metas e o
 
 - **Objetivos personalizados**: O usuário define um objetivo (ex: aprender a tocar violão) para a IA e o aplicativo gera um cronograma com tarefas diárias específicas.
 - **Acompanhamento de progresso**: O usuário pode marcar as tarefas como concluídas e visualizar seu progresso através de um heatmap interativo.
-- **Atraso de tarefas**: Caso o usuário não complete uma tarefa no dia, ela será automaticamente movida para o próximo dia, ajustando o cronograma.
-- **Previsão de tempo restante**: O heatmap exibe a previsão de tempo restante para concluir o objetivo, ajustando o tempo necessário conforme os atrasos.
-- **Motivação e feedback**: O sistema oferece mensagens motivacionais e recomenda ajustes no cronograma com base no progresso do usuário.
-- **Conquista e novos objetivos**: Quando o usuário completa um objetivo, ele é parabenizado, recebe um badge de conquista e pode definir um novo objetivo. O histórico de objetivos concluídos é armazenado.
+- **Previsão de tempo restante**: O heatmap exibe a previsão de tempo restante para concluir o objetivo.
+- **Motivação**: O sistema oferece mensagens motivacionais.
+- **Conquista e novos objetivos**: Quando o usuário completa um objetivo, ele é parabenizado e o histórico de objetivos concluídos é armazenado.
 - **Impedimento de novos objetivos**: O usuário não pode iniciar um novo objetivo antes de completar o atual.
 
 ## Tecnologias Utilizadas
@@ -37,26 +36,16 @@ Este aplicativo tem como objetivo ajudar os usuários a atingirem suas metas e o
 - **RF-05**: O sistema deve gerar automaticamente um cronograma com tarefas diárias com base no objetivo definido pelo usuário.
 - **RF-06**: O sistema deve permitir que o usuário visualize as tarefas do dia.
 - **RF-07**: O sistema deve permitir que o usuário marque uma tarefa como concluída.
-- **RF-08**: O sistema deve adiar automaticamente uma tarefa não concluída para o dia seguinte.
-- **RF-09**: O sistema deve recalcular o cronograma caso haja atrasos frequentes.
-- **RF-10**: O sistema deve exibir um resumo do progresso do usuário.
+- **RF-08**: O sistema deve exibir um resumo do progresso do usuário.
 
 ### 3. Acompanhamento de Progresso
 
-- **RF-11**: O sistema deve exibir um heatmap para visualização do progresso do usuário.
-- **RF-12**: O sistema deve exibir a previsão de tempo restante para conclusão do objetivo.
-- **RF-13**: O sistema deve notificar o usuário caso ele esteja atrasado no cronograma.
+- **RF-09**: O sistema deve exibir um heatmap para visualização do progresso do usuário.
+- **RF-10**: O sistema deve exibir a previsão de tempo restante para conclusão do objetivo.
 
-### 4. Motivação e Feedback
+### 4. Autenticação e Gestão de Usuários
 
-- **RF-14**: O sistema deve exibir mensagens motivacionais baseadas no progresso do usuário.
-- **RF-15**: O sistema deve sugerir ajustes no cronograma caso o usuário esteja com dificuldades em completar as tarefas no prazo.
-- **RF-16**: O sistema deve conceder badges de conquista ao usuário ao concluir um objetivo.
-
-### 5. Autenticação e Gestão de Usuários
-
-- **RF-17**: O sistema deve permitir que o usuário crie uma conta e faça login.
-- **RF-18**: O sistema deve permitir que o usuário edite suas informações de perfil.
+- **RF-11**: O sistema deve permitir que o usuário crie uma conta e faça login.
 
 ## Requisitos Não Funcionais (RNF)
 
